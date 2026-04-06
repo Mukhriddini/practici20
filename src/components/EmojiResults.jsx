@@ -1,14 +1,16 @@
 import React from 'react';
-import EmojiCard from './EmojiCard';
 
-const EmojiResults = ({ emojis }) => {
+function EmojiResults({ emojis }) {
   return (
-    <div className="emoji-results">
-      {emojis.map((emoji) => (
-        <EmojiCard key={emoji.codes} emoji={emoji} />
+    <div className="grid">
+      {emojis.map((emoji, index) => (
+        <div key={index} className="card">
+          <div className="emoji">{emoji.char}</div>
+          <div className="name">{emoji.name}</div>
+        </div>
       ))}
     </div>
   );
-};
+}
 
 export default EmojiResults;

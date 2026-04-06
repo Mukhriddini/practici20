@@ -1,30 +1,61 @@
-import React from 'react';
-import './App.css';
-import Header from './components/Header';
-import SearchBar from './components/SearchBar';
-import EmojiResults from './components/EmojiResults';
+import { useState } from 'react'
+import './App.css'
+import SearchBar from './components/SearchBar'
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState('')
+
   const emojis = [
     {
-      char: '💯',
-      name: '100',
-      keywords: 'Hundred, points, symbol, wow, win, perfect, parties'
+      id: 1,
+      emoji: "💯",
+      title: "100",
+      tags: ["Hundred", "points", "symbol", "wow", "win", "perfect", "parties"]
     },
     {
-      char: '🔢',
-      name: '1234',
-      keywords: 'input symbol for numbers symbol'
+      id: 2,
+      emoji: "🔢",
+      title: "1234",
+      description: "input symbol for numbers symbol"
     }
-  ];
+  ]
+
+  const filteredEmojis = emojis.filter(emoji =>
+    emoji.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (emoji.tags && emoji.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))) ||
+    (emoji.description && emoji.description.toLowerCase().includes(searchTerm.toLowerCase()))
+  )
 
   return (
-    <>
-      <Header />
-      <SearchBar />
-      <EmojiResults emojis={emojis} />
-    </>
-  );
+    <div className="app">
+      <div className="header">
+        <h1>Emoji Finder</h1>
+        <p className="subtitle">Find emoji by keywords</p>
+      </div>
+
+      <SearchBar value={searchTerm} onChange={setSearchTerm} />
+
+      <div className="emoji-list">
+        {filteredEmojis.map(emoji => (
+          <div key={emoji.id} className="emoji-item">
+            <span className="emoji-symbol">{emoji.emoji}</span>
+            <div className="emoji-info">
+              <div className="emoji-title">{emoji.title}</div>
+              {emoji.tags ? (
+                <div className="emoji-tags">{emoji.tags.join(', ')}</div>
+              ) : (
+                <div className="emoji-description">{emoji.description}</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredEmojis.length === 0 && (
+        <div className="no-results">No emoji found</div>
+      )}
+    </div>
+  )
 }
 
-export default App;
+export default App

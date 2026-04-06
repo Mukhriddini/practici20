@@ -1,13 +1,253 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-react-app</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Finder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #f5f5f7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .card {
+            max-width: 780px;
+            width: 100%;
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: all 0.2s ease;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .subhead {
+            color: #6c6f78;
+            margin-bottom: 1.8rem;
+            font-size: 1rem;
+            border-left: 3px solid #ffcc00;
+            padding-left: 0.8rem;
+        }
+
+        .search-box {
+            margin-bottom: 2rem;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #e2e4e8;
+            border-radius: 1.5rem;
+            background: #f9f9fb;
+            transition: 0.2s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #ffcc00;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2);
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0 2rem 0;
+        }
+
+        .emoji-card {
+            background: #ffffff;
+            border: 1px solid #edeef2;
+            border-radius: 1.25rem;
+            padding: 1rem;
+            transition: all 0.2s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        }
+
+        .emoji-card:hover {
+            border-color: #ffdd55;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .emoji-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .emoji {
+            font-size: 2.4rem;
+        }
+
+        .keyword {
+            font-weight: 600;
+            font-size: 1rem;
+            background: #f0f0f4;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            color: #2c2e35;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .tag {
+            background: #f8f8fa;
+            color: #555;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.7rem;
+            border-radius: 30px;
+            letter-spacing: 0.3px;
+        }
+
+        .placeholder-message {
+            background: #fef5e0;
+            border-radius: 1.2rem;
+            padding: 2rem;
+            text-align: center;
+            color: #a16200;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .footer-action {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eeeef2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            background: #1a1d29;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.6rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #2e3347;
+            transform: scale(0.97);
+        }
+
+        .note {
+            color: #8e8e98;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 550px) {
+            .card {
+                padding: 1.3rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>🔍 Emoji Finder</h1>
+    <div class="subhead">Find emoji by keywords</div>
+
+    <div class="search-box">
+        <input type="text" placeholder="try: hundred, points, symbol, wow, win..." id="searchInput">
+    </div>
+
+    <div id="emojiContainer" class="emoji-grid">
+        <!-- Динамические карточки будут здесь -->
+    </div>
+
+    <div class="footer-action">
+        <span class="note">✨ Sign up to comment, edit, inspect and more.</span>
+        <button class="btn" id="signupBtn">Sign up</button>
+    </div>
+</div>
+
+<script>
+    const emojiLibrary = [
+        { emoji: "💯", keyword: "100", tags: ["hundred", "points", "symbol", "wow", "win", "perfect", "parties"] },
+        { emoji: "🔢", keyword: "1234", tags: ["input symbol", "numbers", "symbol"] },
+        { emoji: "🎉", keyword: "party", tags: ["celebration", "win", "perfect", "parties"] },
+        { emoji: "🏆", keyword: "trophy", tags: ["win", "perfect", "champion", "award"] },
+        { emoji: "⭐", keyword: "star", tags: ["wow", "perfect", "symbol", "rating"] }
+    ];
+
+    function renderEmojis(filterText = "") {
+        const container = document.getElementById("emojiContainer");
+        const lowerFilter = filterText.toLowerCase().trim();
+
+        let filtered = emojiLibrary;
+
+        if (lowerFilter !== "") {
+            filtered = emojiLibrary.filter(item =>
+                item.keyword.toLowerCase().includes(lowerFilter) ||
+                item.tags.some(tag => tag.toLowerCase().includes(lowerFilter))
+            );
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="placeholder-message">😕 No emoji found — try "win", "symbol" or "hundred"</div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(item => `
+            <div class="emoji-card">
+                <div class="emoji-header">
+                    <span class="emoji">${item.emoji}</span>
+                    <span class="keyword">${item.keyword}</span>
+                </div>
+                <div class="tags">
+                    ${item.tags.slice(0, 6).map(tag => `<span class="tag">#${tag}</span>`).join("")}
+                    ${item.tags.length > 6 ? '<span class="tag">+more</span>' : ""}
+                </div>
+            </div>
+        `).join("");
+    }
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+        renderEmojis(e.target.value);
+    });
+
+    document.getElementById("signupBtn").addEventListener("click", () => {
+        alert("Sign up flow — here you’d open modal or redirect");
+        // можно добавить форму регистрации
+    });
+
+    // стартовый рендер
+    renderEmojis();
+</script>
+</body>
 </html>

@@ -1,62 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:root {
+  --primary-bg: #117a7a;
+  --secondary-bg: #f5f6fa;
+  --text-white: #ffffff;
+  --text-muted: #e0f2f1;
+  --card-bg: #ffffff;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--secondary-bg);
+}
+
+.app {
+  min-height: 100vh;
+}
+
 .header {
-  background-color: #008080;
-  padding: 20px;
+  background-color: var(--primary-bg);
+  padding: 60px 20px 80px;
   text-align: center;
-  color: white;
+  color: var(--text-white);
 }
 
 .header h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
   margin: 0;
-  font-size: 3rem;
 }
 
-.header p {
-  margin: 0;
+.header .subtitle {
   font-size: 1.2rem;
+  color: var(--text-muted);
+  margin-top: 10px;
 }
 
-.search-bar-container {
-  text-align: center;
-  margin-top: -25px;
+.search-wrapper {
+  max-width: 800px;
+  margin: -30px auto 40px;
+  padding: 0 20px;
 }
 
-.search-bar {
-  width: 80%;
-  max-width: 500px;
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+.search-input {
+  width: 100%;
+  padding: 20px 25px;
+  border-radius: 8px;
+  border: none;
   font-size: 1.2rem;
+  box-shadow: var(--shadow);
+  box-sizing: border-box;
 }
 
-.emoji-results {
+.search-input::placeholder {
+  color: #ccc;
+}
+
+.emoji-list {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  margin-top: 20px;
-}
-
-.emoji-card {
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  flex-wrap: wrap;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  margin: 10px;
+}
+
+.emoji-item {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 30px 20px;
+  width: 280px;
   text-align: center;
-  width: 150px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
 }
 
-.emoji {
-  font-size: 3rem;
-  margin: 0;
+.emoji-item:hover {
+  transform: translateY(-5px);
 }
 
-.emoji-name {
-  font-size: 0.9rem;
-  color: #555;
+.emoji-symbol {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 15px;
 }
 
-.emoji-keywords {
-  font-size: 0.8rem;
-  color: #777;
+.emoji-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.emoji-tags, .emoji-description {
+  font-size: 0.85rem;
+  color: #888;
+  line-height: 1.4;
+}
+
+.no-results {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin-top: 40px;
 }
